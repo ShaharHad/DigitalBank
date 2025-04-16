@@ -28,6 +28,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/api/v1/auth', proxy(process.env.AUTH_SERVICE));
+app.use('/api/v1/user', proxy(process.env.USER_SERVICE));
 
 // for tests 
 app.use('/api/v1/ping', (req, res) => res.status(200).json(
