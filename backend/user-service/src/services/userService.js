@@ -4,28 +4,28 @@ const createError = require('../utils/createError');
 exports.getUser = async (id) => {
     const user = await User.findById(id);
     if (!user) {
-        throw createError(404, `User not found by ${field}`);
+        throw createError(404, `User not found`);
     }
     return user;
 };
 
-exports.createUser = async ({ name, email, phone }) => {
-    const userExisting = await User.findBy("email", email);
+exports.createUser = async (id, name, phone ) => {
+    const userExisting = await User.findById(id);
     if (userExisting) {
-        throw createError(409, "Email already exists");
+        throw createError(409, "Id already exists");
     }
 
-    const newUser = await User.create({ name, email, phone });
+    const newUser = await User.create( id, name, phone );
     return newUser;
 };
 
 exports.updateUser = async (id, updates) => {
-    const existing = await User.findBy("id", id);
+    const existing = await User.findById("id", id);
     if (!existing) {
         throw createError(404, "User not found");
     }
 
     await User.update(id, updates);
-    const updated = await User.findBy("id", id);
+    const updated = await User.update(id, updates);
     return updated;
 };

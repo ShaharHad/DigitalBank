@@ -2,17 +2,31 @@ const Auth = require('../models/authModel');
 const { hashString, compareStrings } = require('../utils/hash');
 const createError = require('../utils/createError');
 const generateJWT = require('../utils/createJWT');
+const userServiceClient = require('./userServiceClient');
+const logger = require('../utils/logger');
 
-exports.register = async ({name, email, password}) => {
+exports.register = async ({name, email, password, phone}) => {
+
     const existingUser = await Auth.findByEmail(email);
     if(existingUser){
         throw createError(409, "Email already in use");
     }
 
     const hashedPassword = await hashString(password);
-    const newUser = await Auth.createUser({name, email, password: hashedPassword});
+    const newUserId = await Auth.createUser(email, hashedPassword);
+    var newUser = null;
+    try{
+        
+        newUser = await userServiceClient.createUser(newUserId, name, phone);
+        
+    }
+    catch (err){
+        await Auth.delete(email);
+        logger.info("Remove Auth user record")
+        throw err;
+    }
 
-    return { id: newUser.id, name: newUser.name, email: newUser.email };
+    return { id: newUser.id, name: newUser.name };
 }
 
 exports.login = async (email, password) => {

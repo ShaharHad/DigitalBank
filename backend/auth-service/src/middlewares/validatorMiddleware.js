@@ -31,6 +31,25 @@ exports.registerValidateSchema = checkSchema({
             errorMessage: "Email should be maximum 50 characters",
         },
     },
+    phone: {
+        in: ["body"],
+        exists: {errorMessage: "Phone is required"},
+        isLength: {
+            options: {  },
+            errorMessage: "Email should be maximum 50 characters",
+        },
+        isString: {
+            errorMessage: "Phone number must be a string",
+        },
+        isLength: {
+            options: { min: 10, max: 10 },
+            errorMessage: "Phone number must be exactly 10 digits",
+        },
+        matches: {
+            options: [/^\d{10}$/],
+            errorMessage: "Phone number must contain only digits (0-9)",
+        },
+    },
 });
 
 exports.loginValidateSchema = checkSchema({

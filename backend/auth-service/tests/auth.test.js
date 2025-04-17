@@ -7,6 +7,9 @@ const User = require('../src/models/authModel');
 jest.mock('../src/utils/hash');
 const { compareStrings } = require('../src/utils/hash');
 
+jest.mock('../src/services/userServiceClient');
+const userServiceClient = require('../src/services/userServiceClient');
+
 describe('POST /register', () => {
 
     afterEach(() => {
@@ -15,11 +18,12 @@ describe('POST /register', () => {
 
     it('should register a new user', async () => {
         User.findByEmail.mockResolvedValue(null);
-        User.createUser.mockResolvedValue({ id: 1, name: "test", email: "test@example.com" });
+        User.createUser.mockResolvedValue({ id: 1, name: "test", email: "test@example.com", phone: "0123456789" });
+        userServiceClient.createUser.mockResolvedValue(20);
 
         const res = await request(app)
         .post('/register')
-        .send({ email: "test@example.com", password: "secret", name: "test"});
+        .send({ email: "test@example.com", password: "secret", name: "test", phone: "0123456789"});
   
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({ message: "User registered successfully" });
@@ -30,7 +34,7 @@ describe('POST /register', () => {
     
         const res = await request(app)
           .post('/register')
-          .send({ email: "test@example.com", password: "secret", name: "test" });
+          .send({ email: "test@example.com", password: "secret", name: "test", phone: "0123456789" });
     
         expect(res.statusCode).toBe(409);
         expect(res.body).toEqual({ message: "Email already in use" });
@@ -39,7 +43,7 @@ describe('POST /register', () => {
       it('should return 422 if email is missing', async () => {
         const res = await request(app)
           .post('/register')
-          .send({ password: "secret", name: "test" });
+          .send({ password: "secret", name: "test", phone: "0123456789" });
     
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({ message: "Email is required" });
@@ -49,7 +53,7 @@ describe('POST /register', () => {
       it('should return 422 if email is not valid', async () => {
         const res = await request(app)
           .post('/register')
-          .send({ email: "test.com", password: "secret", name: "test" });
+          .send({ email: "test.com", password: "secret", name: "test", phone: "0123456789" });
     
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({ message: "Please provide valid email" });
@@ -59,7 +63,7 @@ describe('POST /register', () => {
       it('should return 422 if password is missing', async () => {
         const res = await request(app)
           .post('/register')
-          .send({ email: "test@example.com", name: "test"});
+          .send({ email: "test@example.com", name: "test", phone: "0123456789"});
     
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({ message: "Password is required" });
@@ -68,7 +72,7 @@ describe('POST /register', () => {
       it('should return 422 if password is not string', async () => {
         const res = await request(app)
           .post('/register')
-          .send({ email: "test@example.com", password: 123457, name: "test"});
+          .send({ email: "test@example.com", password: 123457, name: "test", phone: "0123456789"});
     
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({ message: "Password should be string" });
@@ -77,7 +81,7 @@ describe('POST /register', () => {
       it('should return 422 for password length smaller then 5', async () => {
         const res = await request(app)
             .post('/register')
-            .send({email: "test@example.com", password: "1234", name: "test"});
+            .send({email: "test@example.com", password: "1234", name: "test", phone: "0123456789"});
         
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({message: "Password should be at least 5 characters and maximum 20 characters"});
@@ -86,7 +90,7 @@ describe('POST /register', () => {
       it('should return 422 if name is missing', async () => {
         const res = await request(app)
           .post('/register')
-          .send({ email: "test@example.com", password: "secret"});
+          .send({ email: "test@example.com", password: "secret", phone: "0123456789"});
     
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({ message: "Name is required" });
@@ -95,7 +99,7 @@ describe('POST /register', () => {
       it('should return 422 if name is not string', async () => {
         const res = await request(app)
           .post('/register')
-          .send({ email: "test@example.com", password: "secret", name: 123456});
+          .send({ email: "test@example.com", password: "secret", name: 123456, phone: "0123456789"});
     
         expect(res.statusCode).toBe(422);
         expect(res.body).toEqual({ message: "Name should be string" });
@@ -116,7 +120,7 @@ describe('POST /register', () => {
     
         const res = await request(app)
           .post('/register')
-          .send({ email: "test@example.com", password: "secret", name: "test" });
+          .send({ email: "test@example.com", password: "secret", name: "test", phone: "0123456789" });
     
         expect(res.statusCode).toBe(500);
         expect(res.body).toEqual({ message: "DB error" });

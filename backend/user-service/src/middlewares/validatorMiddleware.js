@@ -1,6 +1,12 @@
 const { checkSchema } = require('express-validator');
 
 exports.createUserValidateSchema = checkSchema({
+    id: {
+        in: ["body"],
+        exists: {
+            errorMessage: "Id is required",
+        },
+    },
     name: {
         in: ["body"],
         exists: {
@@ -13,23 +19,17 @@ exports.createUserValidateSchema = checkSchema({
             errorMessage: "Name should be between 2 and 50 characters",
         },
     },
-    email: {
+    phone: {
         in: ["body"],
-        exists: { errorMessage: "Email is required" },
-        isEmail: { errorMessage: "Please provide a valid email" },
+        exists: { errorMessage: "Phone is required" },
+        isString: { errorMessage: "Phone should be a string" },
         isLength: {
-            options: { max: 100 },
-            errorMessage: "Email should be a maximum of 100 characters",
+            options: { min: 10, max: 10 },
+            errorMessage: "Phone number must be exactly 10 digits",
         },
-    },
-
-    password: {
-        in: ["body"],
-        exists: { errorMessage: "Password is required" },
-        isString: { errorMessage: "Password should be a string" },
-        isLength: {
-            options: { min: 8, max: 20 },
-            errorMessage: "Password should be at least 8 characters and at most 20 characters",
+        matches: {
+            options: [/^\d{10}$/],
+            errorMessage: "Phone number must contain only digits (0-9)",
         },
     },
 });
@@ -41,31 +41,27 @@ exports.updateUserValidateSchema = checkSchema({
     },
     name: {
         in: ["body"],
-        optional: true, // name is optional during update
+        optional: true,
         isString: { errorMessage: "Name should be a string" },
         isLength: {
             options: { min: 2, max: 50 },
             errorMessage: "Name should be between 2 and 50 characters",
         },
     },
-    email: {
+    phone: {
         in: ["body"],
-        optional: true, // email is optional during update
-        isEmail: { errorMessage: "Please provide a valid email" },
+        optional: true,
+        isString: { errorMessage: "Phone should be a string" },
         isLength: {
-            options: { max: 100 },
-            errorMessage: "Email should be a maximum of 100 characters",
+            options: { min: 10, max: 10 },
+            errorMessage: "Phone number must be exactly 10 digits",
+        },
+        matches: {
+            options: [/^\d{10}$/],
+            errorMessage: "Phone number must contain only digits (0-9)",
         },
     },
-    password: {
-        in: ["body"],
-        optional: true,  // password is optional during update
-        isString: { errorMessage: "Password should be a string" },
-        isLength: {
-            options: { min: 8, max: 20 },
-            errorMessage: "Password should be at least 8 characters and at most 20 characters",
-        },
-    },
+
 });
 
 exports.getUserValidateSchema = checkSchema({

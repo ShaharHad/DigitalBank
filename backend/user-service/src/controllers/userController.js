@@ -1,5 +1,6 @@
 const userService = require('../services/userService');
 const createError = require('../utils/createError');
+const logger = require('../utils/logger');
 
 exports.getUser = async (req, res, next) => {
     try {
@@ -18,9 +19,9 @@ exports.getUser = async (req, res, next) => {
 
 exports.createUser = async (req, res, next) => {
     try {
-        const { name, email, phone } = req.body;
+        const { id, name, phone } = req.body;
 
-        const user = await userService.createUser({ name, email, phone });
+        const user = await userService.createUser( id, name, phone );
         res.status(201).json(user);
     } catch (err) {
         next(err);

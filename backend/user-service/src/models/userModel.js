@@ -8,12 +8,12 @@ exports.findById = async (id) => {
     return rows[0];
 };
 
-exports.create = async ({ name, email, phone }) => {
+exports.create = async ( id, name, phone ) => {
     const [result] = await db.execute(
-        'INSERT INTO users (name, email, phone) VALUES (?, ?, ?)',
-        [name, email, phone]
+        'INSERT INTO users (id, name, phone) VALUES (?, ?, ?)',
+        [id, name, phone]
     );
-    return { id: result.insertId, name, email, phone };
+    return { id: result.insertId, name, phone };
 };
 
 exports.update = async (id, updates) => {
