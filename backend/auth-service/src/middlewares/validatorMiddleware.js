@@ -5,7 +5,6 @@ exports.registerValidateSchema = checkSchema({
         in: ["body"],
         exists: {
             errorMessage: "Name is required",
-            options: { checkFalsy: true }, // if the variable is null/0/""/false ... validation is fail
         },
         isString: { errorMessage: "Name should be string" },
         isLength: {

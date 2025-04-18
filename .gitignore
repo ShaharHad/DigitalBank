@@ -9,4 +9,8 @@
 /backend/user-service/.env
 /backend/user-service/package-lock.json
 
+/backend/account-service/node_modules
+/backend/account-service/.env
+/backend/account-service/package-lock.json
+
 /.vscode
