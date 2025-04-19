@@ -10,6 +10,9 @@ const { compareStrings } = require('../src/utils/hash');
 jest.mock('../src/services/userServiceClient');
 const userServiceClient = require('../src/services/userServiceClient');
 
+jest.mock('../src/services/accountServiceClient');
+const accountServiceClient = require('../src/services/accountServiceClient');
+
 describe('POST /register', () => {
 
     afterEach(() => {
@@ -19,13 +22,14 @@ describe('POST /register', () => {
     it('should register a new user', async () => {
         User.findByEmail.mockResolvedValue(null);
         User.createUser.mockResolvedValue({ id: 1, name: "test", email: "test@example.com", phone: "0123456789" });
-        userServiceClient.createUser.mockResolvedValue(20);
+        userServiceClient.createUser.mockResolvedValue(20, 1, "Shahar");
+        accountServiceClient.createUser.mockResolvedValue(20, 1, "Shahar");
 
         const res = await request(app)
         .post('/register')
         .send({ email: "test@example.com", password: "secret", name: "test", phone: "0123456789"});
   
-        expect(res.statusCode).toBe(200);
+        expect(res.statusCode).toBe(201);
         expect(res.body).toEqual({ message: "User registered successfully" });
     });
 

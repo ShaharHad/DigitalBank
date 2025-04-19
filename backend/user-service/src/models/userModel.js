@@ -1,5 +1,4 @@
 const db = require('../db/db');
-const createError = require('../utils/createError');
 
 exports.findById = async (id) => {
     const [rows] = await db.execute(

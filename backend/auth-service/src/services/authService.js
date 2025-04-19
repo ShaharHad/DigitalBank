@@ -3,6 +3,7 @@ const { hashString, compareStrings } = require('../utils/hash');
 const createError = require('../utils/createError');
 const generateJWT = require('../utils/createJWT');
 const userServiceClient = require('./userServiceClient');
+const accountServiceClient = require('./accountServiceClient');
 const logger = require('../utils/logger');
 
 exports.register = async ({name, email, password, phone}) => {
@@ -15,14 +16,14 @@ exports.register = async ({name, email, password, phone}) => {
     const hashedPassword = await hashString(password);
     const newUserId = await Auth.createUser(email, hashedPassword);
     var newUser = null;
+    var newAccount = null;
     try{
-        
         newUser = await userServiceClient.createUser(newUserId, name, phone);
-        
+        newAccount = await accountServiceClient.createUser(newUserId, name, phone);
     }
     catch (err){
         await Auth.delete(email);
-        logger.info("Remove Auth user record")
+        logger.info("Error with userServiceClient/accountServiceClient - remove Auth user record")
         throw err;
     }
 

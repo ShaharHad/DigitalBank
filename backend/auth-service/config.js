@@ -12,5 +12,6 @@ module.exports = {
         secret: process.env.JWT_SECRET,
         expiresIn: '1h'
     },
-    userServiceUrl: process.env.USER_SERVICE_URL
+    userServiceUrl: process.env.USER_SERVICE_URL,
+    accountServiceUrl: process.env.ACCOUNT_SERVICE_URL
 }
