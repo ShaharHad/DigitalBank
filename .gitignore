@@ -1,3 +1,5 @@
+#backend
+
 /backend/.env
 /backend/gateway/node_modules
 /backend/gateway/.env
@@ -8,9 +10,15 @@
 /backend/user-service/node_modules
 /backend/user-service/.env
 /backend/user-service/package-lock.json
-
 /backend/account-service/node_modules
 /backend/account-service/.env
 /backend/account-service/package-lock.json
+/backend/transaction-service/node_modules
+/backend/transaction-service/.env
+/backend/transaction-service/package-lock.json
 
 /.vscode
+
+#frontend
+
+/frontend/.env

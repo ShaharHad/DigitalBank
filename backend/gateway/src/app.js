@@ -5,6 +5,7 @@ const cors = require('cors');
 const morgan = require("morgan");
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
+const authMiddleware = require('./middlewares/authMiddleware');
 
 app = express();
 
@@ -14,7 +15,8 @@ const middlewareMorgan = morgan(
         write: (message) => logger.http(message.trim()),
 });
 
-app.use(middlewareMorgan);
+
+
 
 const allowedOrigins = ["http://localhost:5000"];
 
@@ -25,10 +27,14 @@ const corsOptions = {
     allowedHeaders:["Content-Type", "Authorization"]
 };
 
+app.use(middlewareMorgan);
 app.use(cors(corsOptions));
+// app.use(authMiddleware);
 
 app.use('/api/v1/auth', proxy(process.env.AUTH_SERVICE));
 app.use('/api/v1/user', proxy(process.env.USER_SERVICE));
+app.use('/api/v1/account', proxy(process.env.ACCOUNT_SERVICE));
+app.use('/api/v1/transaction', proxy(process.env.TRANSACTION_SERVICE));
 
 // for tests 
 app.use('/api/v1/ping', (req, res) => res.status(200).json(

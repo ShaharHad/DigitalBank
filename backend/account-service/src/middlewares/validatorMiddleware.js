@@ -3,8 +3,6 @@ const { checkSchema } = require('express-validator');
 exports.createAccountValidator = checkSchema({
     user_id: {
         in: ["body"],
-        isInt: { errorMessage: "user_id must be an integer" },
-        toInt: true
     },
     account_type: {
         in: ["body"],

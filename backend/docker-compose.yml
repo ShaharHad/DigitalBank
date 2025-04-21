@@ -32,3 +32,11 @@ services:
       - ./gateway/.env
     ports:
       - "8000:8000"
+
+  account-service:
+    build: ./account-service
+    container_name: account-service
+    env_file:
+      - ./account-service/.env
+    ports:
+      - "8003:8003"

@@ -1,6 +1,6 @@
 const db = require("../db/db");
 
-exports.createAccount = async ({ user_id, account_type = "personal", balance = 0 }) => {
+exports.createAccount = async ( user_id, account_type = "personal", balance = 0 ) => {
   const [result] = await db.query(
     "INSERT INTO accounts (user_id, account_type, balance) VALUES (?, ?, ?)",
     [user_id, account_type, balance]

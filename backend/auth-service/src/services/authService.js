@@ -6,7 +6,7 @@ const userServiceClient = require('./userServiceClient');
 const accountServiceClient = require('./accountServiceClient');
 const logger = require('../utils/logger');
 
-exports.register = async ({name, email, password, phone}) => {
+exports.register = async (name, email, password, phone) => {
 
     const existingUser = await Auth.findByEmail(email);
     if(existingUser){
@@ -42,6 +42,10 @@ exports.login = async (email, password) => {
     }
 
     const token = generateJWT({email: user.email});
+    const res = {
+        user:{id: user.id, email: user.email},
+        token: token,
+    }
 
-    return { user: {name: user.name, email: user.email}, token: token};
+    return res;
 }

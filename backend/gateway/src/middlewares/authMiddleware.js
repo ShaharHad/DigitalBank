@@ -1,10 +1,7 @@
-const jwt = require("jsonwebtoken");
-
 const { jwtSecret } = require("../../config");
 const createError = require('../utils/createError')
 const verifyJWT = require('../utils/verifyJWT');
 
-// List of paths to exclude from JWT check
 const excludedPaths = [
     "/api/v1/auth/login",
     "/api/v1/auth/register"
@@ -16,6 +13,7 @@ module.exports = async (req, res, next) => {
     }
 
     const authHeader = req.headers.authorization;
+    console.log(req.headers)
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return next(createError(401, "Unauthorized: No token provided"))
@@ -24,7 +22,7 @@ module.exports = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     try {
-        const decoded = jwt.verify(token, jwtSecret);
+        const decoded = verifyJWT(token, jwtSecret);
         req.user = decoded;
         next();
     } catch (err) {

@@ -29,8 +29,16 @@ CREATE TABLE IF NOT EXISTS accounts (
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       
-      FOREIGN KEY (user_id) REFERENCES users(id)
       CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-
 );
 
+    CREATE TABLE IF NOT EXISTS transactions (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      account_id INT NOT NULL,
+      type ENUM('deposit', 'withdraw', 'transfer') NOT NULL,
+      amount DECIMAL(10,2) NOT NULL CHECK (amount > 0),
+      description VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+      CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+    );

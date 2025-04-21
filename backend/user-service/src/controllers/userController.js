@@ -13,6 +13,7 @@ exports.getUser = async (req, res, next) => {
 
         return res.status(200).json(user);
     } catch (err) {
+        logger.error("getUser");
         next(err);
     }
 };
@@ -20,10 +21,11 @@ exports.getUser = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         const { id, name, phone } = req.body;
-
+        console.log("here");
         const user = await userService.createUser( id, name, phone );
         return res.status(201).json(user);
     } catch (err) {
+        logger.error("createUser");
         next(err);
     }
 };
@@ -36,6 +38,7 @@ exports.updateUser = async (req, res, next) => {
         const user = await userService.updateUser(id, updates);
         return res.status(200).json(user);
     } catch (err) {
+        logger.error("updateUser");
         next(err);
     }
 };

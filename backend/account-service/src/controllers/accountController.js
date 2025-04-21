@@ -1,11 +1,13 @@
 const accountService = require("../services/accountService");
+const logger = require('../utils/logger');
 
 exports.createAccount = async (req, res, next) => {
   try {
-    const { user_id, account_type, balance } = req.body;
-    const account = await accountService.createAccount(user_id, account_type, balance);
+    const { id, account_type, balance } = req.body;
+    const account = await accountService.createAccount(id, account_type, balance);
     return res.status(201).json(account);
   } catch (err) {
+    logger.error("createAccount");
     next(err);
   }
 };
@@ -16,6 +18,7 @@ exports.getAccount = async (req, res, next) => {
     const account = await accountService.getAccount(user_id);
     return res.status(200).json(account);
   } catch (err) {
+    logger.error("getAccount");
     next(err);
   }
 };
@@ -27,6 +30,7 @@ exports.updateBalance = async (req, res, next) => {
     await accountService.updateAccountBalance(user_id, new_balance);
     return res.status(200).json({ message: "Balance updated" });
   } catch (err) {
+    logger.error("updateBalance");
     next(err);
   }
 };
@@ -37,6 +41,7 @@ exports.deleteAccount = async (req, res, next) => {
     await accountService.deleteAccount(user_id);
     return res.status(200).json({ message: "Account deleted" });
   } catch (err) {
+    logger.error("deleteAccount");
     next(err);
   }
 };

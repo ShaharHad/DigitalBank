@@ -1,6 +1,7 @@
 const db = require('../db/db');
 
 exports.findByEmail = async (email) => {
+    
     const [rows] = await db.execute(
         `SELECT * FROM auth_users WHERE email=?`, [email]
     );
