@@ -43,6 +43,6 @@ exports.transfer = async (req, res, next) => {
       return res.status(200).json(transactions);
     } catch (err) {
       logger.error("getTransactions");
-      next(err);
+      return next(err);
     }
   };

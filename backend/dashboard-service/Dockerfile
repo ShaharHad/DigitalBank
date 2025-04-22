@@ -9,7 +9,7 @@ RUN npm install --only=production
 
 COPY . .
 
-EXPOSE 8001
+EXPOSE 8005
 
 COPY wait-for-mysql.sh /wait-for-mysql.sh
 RUN chmod +x /wait-for-mysql.sh

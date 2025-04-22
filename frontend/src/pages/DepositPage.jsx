@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box, TextField, Button, Typography, Alert, Paper,} from "@mui/material";
+import { Box, TextField, Button, Typography, Alert, Paper } from "@mui/material";
 
-import {depositApi} from '../api/transaction';
+import useDeposit from "../hooks/useDeposit";
 import { useAuth } from "../contexts/AuthContext";
 
 const DepositPage = () => {
+  const { user } = useAuth();
+  const { triggerDeposit, loading, error } = useDeposit();
 
-  const {user} = useAuth();
-
-  const [form, setForm] = useState({ userId: null, amount: "", description: ""});
-  const [message, setMessage] = useState({
-    msg: "",
-    severity: ""
-  });
+  const [form, setForm] = useState({ userId: null, amount: "", description: "" });
+  const [message, setMessage] = useState({ msg: "", severity: "" });
 
   useEffect(() => {
     if (user) {
@@ -26,23 +23,25 @@ const DepositPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage({msg: "", severity: ""});
+    setMessage({ msg: "", severity: "" });
 
     const amountNum = parseFloat(form.amount);
 
     if (isNaN(amountNum) || amountNum <= 0) {
       setMessage({
         msg: "Please enter a valid deposit amount.",
-        severity: "error"
+        severity: "error",
       });
       return;
     }
-    depositApi(form).then((res) => {
-      setMessage({msg: "Deposit successes", severity: "success"});
-    }).catch((err) => {
-      setMessage({msg: err.message, severity: "error"});
-    });
 
+    const result = await triggerDeposit(form);
+    if (result) {
+      setMessage({ msg: "Deposit successful", severity: "success" });
+      setForm((prev) => ({ ...prev, amount: "", description: "" }));
+    } else if (error) {
+      setMessage({ msg: error, severity: "error" });
+    }
   };
 
   return (
@@ -50,9 +49,12 @@ const DepositPage = () => {
       <Typography variant="h5" mb={3}>
         Deposit
       </Typography>
-      {message.msg && <Alert severity={message.severity} sx={{ mb: 2 }}>
-        {message.msg}
-      </Alert>}
+
+      {message.msg && (
+        <Alert severity={message.severity} sx={{ mb: 2 }}>
+          {message.msg}
+        </Alert>
+      )}
 
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <TextField
@@ -70,19 +72,19 @@ const DepositPage = () => {
           name="description"
           multiline
           rows={4}
-          slotProps={{
-            input: {
-              maxLength: 200,
-            },
-          }}
           value={form.description}
           onChange={handleChange}
           fullWidth
           margin="normal"
           type="text"
+          slotProps={{
+            input: {
+              maxLength: 200,
+            },
+          }}
         />
-        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-          Deposit
+        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }} disabled={loading}>
+          {loading ? "Processing..." : "Deposit"}
         </Button>
       </Box>
     </Paper>

@@ -17,8 +17,16 @@
 /backend/transaction-service/.env
 /backend/transaction-service/package-lock.json
 
+/backend/dashboard-service/node_modules/
+/backend/dashboard-service/.env
+/backend/dashboard-service/package-lock.json
+
+
 /.vscode
 
 #frontend
 
 /frontend/.env
+things to do.txt
+backend/dashboard-service/.env
+

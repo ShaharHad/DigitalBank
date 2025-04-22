@@ -18,9 +18,13 @@ exports.withdraw = async (userId, amount, description = null) => {
 };
 
 exports.transfer = async (userId_sender, userId_receiver, amount, description = null) => {
-const depositTransaction = await transactionModel.insertTransaction(userId_sender, userId_receiver, "transfer", amount, description);
+  
+  const senderAccount  = await accountServiceClient.getAccount(userId_sender);
+  const receiverAccount = await accountServiceClient.getAccount(userId_receiver);
 
-return depositTransaction;
+  const depositTransaction = await transactionModel.insertTransaction(senderAccount.id, receiverAccount.id, "transfer", amount, description);
+
+  return depositTransaction;
 };
 
 exports.getTransactions = async (userId) => {

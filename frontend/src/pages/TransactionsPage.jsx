@@ -14,6 +14,7 @@ import {
 
 import { useAuth } from "../contexts/AuthContext";
 import { getTransactions } from "../api/transaction";
+import TransactionTable from "../components/TransactionTable";
 
 const TransactionPage = () => {
 
@@ -23,10 +24,13 @@ const TransactionPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if(!user){
+      return;
+    }
     const fetchTransactions = async () => {
       try {
-        const data = await getTransactions(user.id); // need to return array
-        setTransactions(data);
+        const transactions = await getTransactions(user.id);
+        setTransactions(transactions);
       } catch (err) {
         console.error("Failed to load transactions:", err);
       } finally {
@@ -46,28 +50,7 @@ const TransactionPage = () => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><strong>ID</strong></TableCell>
-                <TableCell><strong>Type</strong></TableCell>
-                <TableCell><strong>Amount</strong></TableCell>
-                <TableCell><strong>Date</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {transactions.map((tx) => (
-                <TableRow key={tx.id}>
-                  <TableCell>{tx.id}</TableCell>
-                  <TableCell>{tx.type}</TableCell>
-                  <TableCell>{tx.amount}</TableCell>
-                  <TableCell>{new Date(tx.created_at).toLocaleString()}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TransactionTable transactions={transactions}/>
       )}
     </Container>
   );

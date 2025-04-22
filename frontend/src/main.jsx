@@ -7,7 +7,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
-import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
 import DepositPage from './pages/DepositPage';
 import WithdrawPage from './pages/WithdrawPage';
 import TransactionPage from './pages/TransactionsPage';
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       {path: '/', element: <LoginPage/>},
       {path: '/login', element: <LoginPage/>},
       {path: '/register', element: <RegisterPage/>},
-      {path: '/home', element: <HomePage/>},
+      {path: '/home', element: <DashboardPage/>},
       {path: '/deposit', element: <DepositPage/>},
       {path: '/withdraw', element: <WithdrawPage/>},
       {path: '/transactions', element: <TransactionPage/>},

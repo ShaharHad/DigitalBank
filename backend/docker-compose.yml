@@ -14,6 +14,8 @@ services:
     container_name: auth-service
     env_file:
       - ./auth-service/.env
+    depends_on:
+      - mysql-service
     ports:
       - "8001:8001"
 
@@ -22,6 +24,8 @@ services:
     container_name: user-service
     env_file:
       - ./user-service/.env
+    depends_on:
+      - mysql-service
     ports:
       - "8002:8002"
 
@@ -34,9 +38,32 @@ services:
       - "8000:8000"
 
   account-service:
-    build: ./account-service
+    build: ./account-service    
     container_name: account-service
     env_file:
       - ./account-service/.env
+    depends_on:
+      - mysql-service
     ports:
       - "8003:8003"
+
+  transaction-service:
+    build: ./transaction-service
+    container_name: transaction-service
+    env_file:
+      - ./transaction-service/.env
+    depends_on:
+      - mysql-service
+    ports:
+      - "8004:8004"
+
+  
+  dashboard-service:
+    build: ./dashboard-service
+    container_name: dashboard-service
+    env_file:
+      - ./dashboard-service/.env
+    depends_on:
+      - mysql-service
+    ports:
+      - "8005:8005"
